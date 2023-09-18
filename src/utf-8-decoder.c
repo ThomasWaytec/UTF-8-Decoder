@@ -13,6 +13,16 @@ size_t count_trim_lead_1s(unsigned char* byte) {
     return count;
 }
 
+size_t count_lead_0s(unsigned char byte) {
+    size_t count = 0;
+
+    for (size_t i = 7; !(byte & (1 << i)); i--) {
+        count++;
+    }
+        
+    return count;
+}
+
 int main(void) {
     
     const char* FILE_NAME = "samples/basic/2-byte-char.txt";
@@ -37,7 +47,7 @@ int main(void) {
         /* parse current byte */
         no_of_leading_1s = count_trim_lead_1s(&current_byte);
         /* add to current code point */
-        current_code_point = (current_code_point << 8) | current_byte;
+        current_code_point = current_code_point << 8 | current_byte;
         printf("current_byte=%d\n", current_byte);
 
 
