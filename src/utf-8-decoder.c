@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* counts the number of continuous leading 1's in a byte and trims them. (in binary) */
+/* counts the number of continuous leading 1s in a byte and trims them. (in binary) */
 size_t count_trim_lead_1s(unsigned char* byte) {
     size_t count = 0;
 
@@ -13,6 +13,7 @@ size_t count_trim_lead_1s(unsigned char* byte) {
     return count;
 }
 
+/* counts the number of continuous leading 0s in a byte (in binary) */
 size_t count_lead_0s(unsigned char byte) {
     size_t count = 0;
 
