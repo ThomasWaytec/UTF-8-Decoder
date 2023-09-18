@@ -3,20 +3,19 @@
 
 /* counts the number of continuous leading 1's in a byte and trims them. (in binary) */
 size_t count_trim_lead_1s(unsigned char* byte) {
-    const size_t BITMASK = 128; // a byte with the most significant bit set to 1: 10000000
     size_t count = 0;
 
-    while (*byte & BITMASK) {
+    for (size_t i = 7; *byte & (1 << i); i--) {
         count++;
-        *byte <<= 1;
+        *byte &= ~(1 << i); // trim leading 1
     }
-
+        
     return count;
 }
 
 int main(void) {
     
-    const char* FILE_NAME = "samples/basic/3-byte-char.txt";
+    const char* FILE_NAME = "samples/basic/2-byte-char.txt";
     FILE* file = fopen(FILE_NAME, "rb");
 
 
@@ -25,18 +24,35 @@ int main(void) {
     const size_t FILE_SIZE = ftell(file); 
     fseek(file, 0, SEEK_SET);
 
-
+    printf("file_size=%d\n\n", FILE_SIZE);
 
     unsigned int current_code_point;
     unsigned char current_byte;
-    size_t leading_1s; // number of leading 1s of current_byte
+    size_t no_of_leading_1s; // number of leading 1s in current_byte
 
     for (size_t i = 0; i < FILE_SIZE; i++) {
         current_byte = fgetc(file);
-        printf("current_byte=%d\n", current_byte);        
+        printf("current_byte=%d\n", current_byte);
 
         /* parse current byte */
-        leading_1s = count_trim_lead_1s(&current_byte);
+        no_of_leading_1s = count_trim_lead_1s(&current_byte);
+        /* add to current code point */
+        current_code_point = (current_code_point << 8) | current_byte;
+        printf("current_byte=%d\n", current_byte);
+
+
+        /*
+        for (size_t i = 0; i < no_of_leading_1s - 1; i++)
+        {
+            current_byte = fgetc(file); 
+            count_trim_lead_1s(&current_byte); // trim leading 1s
+            current_code_point = (current_code_point << 8) | current_byte;
+            printf("current_byte=%d\n", current_byte);
+              
+        }
+        */        
+        printf("code_point=%d\n", current_code_point);
+       
         
     }
 
@@ -44,9 +60,9 @@ int main(void) {
     // after all the trimming has been done
 
     /* merge bytes */
-    unsigned int code_point;
-    code_point = (code_point << 8) | n;
-    printf("%d\n", code_point);
+    //unsigned int code_point;
+    //code_point = (code_point << 8) | n;
+    //printf("%d\n", code_point);
 
     return 0;
 }
