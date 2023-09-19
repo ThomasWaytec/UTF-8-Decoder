@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef unsigned int CodePoint;
+
 /* counts the number of continuous leading 1s in a byte and trims them. (in binary) */
 size_t count_trim_lead_1s(unsigned char* byte) {
     size_t count = 0;
@@ -15,6 +17,8 @@ size_t count_trim_lead_1s(unsigned char* byte) {
 
 /* counts the number of continuous leading 0s in a byte (in binary) */
 size_t count_lead_0s(unsigned char byte) {
+    if (!byte) {return 8;}
+
     size_t count = 0;
 
     for (size_t i = 7; !(byte & (1 << i)); i--) {
@@ -23,6 +27,8 @@ size_t count_lead_0s(unsigned char byte) {
         
     return count;
 }
+
+CodePoint process_nonitial_code_units() {}
 
 int main(void) {
     
@@ -38,17 +44,21 @@ int main(void) {
     printf("file_size=%d\n\n", FILE_SIZE);
 
     unsigned int current_code_point;
-    unsigned char current_byte;
+    int current_byte; // needs to be an int to check for EOF. Aftter check, casted to unsigned char
     size_t no_of_leading_1s; // number of leading 1s in current_byte
 
-    for (size_t i = 0; i < FILE_SIZE; i++) {
+    while ((current_byte = fgetc(file)) != EOF) {
+
+        /* read first character of code unit sequence */
+        current_byte = (unsigned char) current_byte;
         current_byte = fgetc(file);
         printf("current_byte=%d\n", current_byte);
 
         /* parse current byte */
-        no_of_leading_1s = count_trim_lead_1s(&current_byte);
-        /* add to current code point */
-        current_code_point = current_code_point << 8 | current_byte;
+        //no_of_leading_1s = count_trim_lead_1s(&current_byte);
+
+
+        current_code_point = current_byte << no_of_leading_1s;
         printf("current_byte=%d\n", current_byte);
 
 
@@ -59,10 +69,15 @@ int main(void) {
             count_trim_lead_1s(&current_byte); // trim leading 1s
             current_code_point = (current_code_point << 8) | current_byte;
             printf("current_byte=%d\n", current_byte);
+
+
+            // add to current code point
+            current_code_point = current_code_point | (current_byte << count_lead_0s(current_byte));
+
               
         }
         */        
-        printf("code_point=%d\n", current_code_point);
+        //printf("code_point=%d\n\n", current_code_point);
        
         
     }
