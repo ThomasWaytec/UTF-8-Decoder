@@ -8,8 +8,9 @@ typedef unsigned int CodePoint;
 
 
 /*
-Counts the number of continuous leading 1s in a byte and trims them. (in binary) 
-The number of leading 1s is equal to the number of code units left in the code unit sequence. (if it's the first code unit of a sequence).
+Counts the number of continuous leading 1s in a code unit and trims them. (in binary) 
+(if it's the first code unit of a sequence,
+the number of leading 1s is equal to the number of code units left in the code unit sequence.)
 */
 size_t parse_code_unit(CodeUnit* byte) {
     size_t count = 0;
