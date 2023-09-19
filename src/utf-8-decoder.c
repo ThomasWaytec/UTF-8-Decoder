@@ -28,7 +28,22 @@ size_t count_lead_0s(unsigned char byte) {
     return count;
 }
 
-CodePoint process_nonitial_code_units() {}
+CodePoint process_nonitial_code_units() {        /*
+    for (size_t i = 0; i < no_of_leading_1s - 1; i++)
+    {
+        current_byte = fgetc(file); 
+        count_trim_lead_1s(&current_byte); // trim leading 1s
+        current_code_point = (current_code_point << 8) | current_byte;
+        printf("current_byte=%d\n", current_byte);
+
+
+        // add to current code point
+        current_code_point = current_code_point | (current_byte << count_lead_0s(current_byte));
+
+            
+    }
+    */        
+}
 
 int main(void) {
     
@@ -62,21 +77,6 @@ int main(void) {
         printf("current_byte=%d\n", current_byte);
 
 
-        /*
-        for (size_t i = 0; i < no_of_leading_1s - 1; i++)
-        {
-            current_byte = fgetc(file); 
-            count_trim_lead_1s(&current_byte); // trim leading 1s
-            current_code_point = (current_code_point << 8) | current_byte;
-            printf("current_byte=%d\n", current_byte);
-
-
-            // add to current code point
-            current_code_point = current_code_point | (current_byte << count_lead_0s(current_byte));
-
-              
-        }
-        */        
         //printf("code_point=%d\n\n", current_code_point);
        
         
