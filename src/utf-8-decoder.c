@@ -3,8 +3,11 @@
 
 typedef unsigned int CodePoint;
 
-/* counts the number of continuous leading 1s in a byte and trims them. (in binary) */
-size_t count_trim_lead_1s(unsigned char* byte) {
+/*
+Counts the number of continuous leading 1s in a byte and trims them. (in binary) 
+The number of leading 1s is equal to the number of code units left in the code unit sequence. (if it's the first code unit of a sequence).
+*/
+size_t parse_code_unit(unsigned char* byte) {
     size_t count = 0;
 
     for (size_t i = 7; *byte & (1 << i); i--) {
@@ -18,7 +21,6 @@ size_t count_trim_lead_1s(unsigned char* byte) {
 /* counts the number of continuous leading 0s in a byte (in binary) */
 size_t count_lead_0s(unsigned char byte) {
     if (!byte) {return 8;}
-
     size_t count = 0;
 
     for (size_t i = 7; !(byte & (1 << i)); i--) {
@@ -28,22 +30,23 @@ size_t count_lead_0s(unsigned char byte) {
     return count;
 }
 
-CodePoint process_nonitial_code_units() {        /*
-    for (size_t i = 0; i < no_of_leading_1s - 1; i++)
+
+parse_nonitial_code_units(FILE* file, CodePoint* code_point, size_t code_units_left) {
+
+    unsigned char current_code_unit;
+    while (code_units_left--)
     {
-        current_byte = fgetc(file); 
-        count_trim_lead_1s(&current_byte); // trim leading 1s
-        current_code_point = (current_code_point << 8) | current_byte;
-        printf("current_byte=%d\n", current_byte);
+        /* parse code unit */
+        current_code_unit = fgetc(file);
+        parse_code_unit(&current_code_unit);
 
-
-        // add to current code point
-        current_code_point = current_code_point | (current_byte << count_lead_0s(current_byte));
-
-            
+        *code_point = current_code_unit << code_units_left;   
     }
-    */        
+
+    
 }
+
+
 
 int main(void) {
     
@@ -55,30 +58,28 @@ int main(void) {
     fseek(file, 0, SEEK_END);
     const size_t FILE_SIZE = ftell(file); 
     fseek(file, 0, SEEK_SET);
-
     printf("file_size=%d\n\n", FILE_SIZE);
 
-    unsigned int current_code_point;
-    int current_byte; // needs to be an int to check for EOF. Aftter check, casted to unsigned char
-    size_t no_of_leading_1s; // number of leading 1s in current_byte
 
-    while ((current_byte = fgetc(file)) != EOF) {
+    CodePoint current_code_point;
+    int first_code_unit; // has to be an int to check for EOF
+    size_t code_units_left; // number of code units left in the code unit sequence
 
-        /* read first character of code unit sequence */
-        current_byte = (unsigned char) current_byte;
-        current_byte = fgetc(file);
-        printf("current_byte=%d\n", current_byte);
+    
+    while ((first_code_unit = fgetc(file)) != EOF)
+    {
 
-        /* parse current byte */
-        //no_of_leading_1s = count_trim_lead_1s(&current_byte);
+        /* parse 1st byte of code unit sequence */
+        printf("first_code_unit=%d\n", first_code_unit);
+        first_code_unit = (unsigned char)first_code_unit;
+        code_units_left = parse_code_unit(&first_code_unit);
 
+        //if (code_units_left) {code_units_left -= 1;} /* substract the 1st code unit itself which was just parsed */
+        printf("code_units_left=%d\n", code_units_left);
+        printf("first_code_unit=%d\n", first_code_unit);
+        current_code_point = first_code_unit << code_units_left;
+        printf("\n");
 
-        current_code_point = current_byte << no_of_leading_1s;
-        printf("current_byte=%d\n", current_byte);
-
-
-        //printf("code_point=%d\n\n", current_code_point);
-       
         
     }
 
