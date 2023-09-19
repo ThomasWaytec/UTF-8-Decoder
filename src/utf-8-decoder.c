@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define BYTE 8
+
 typedef unsigned int CodePoint;
+
 
 /*
 Counts the number of continuous leading 1s in a byte and trims them. (in binary) 
@@ -10,7 +13,7 @@ The number of leading 1s is equal to the number of code units left in the code u
 size_t parse_code_unit(unsigned char* byte) {
     size_t count = 0;
 
-    for (size_t i = 7; *byte & (1 << i); i--) {
+    for (size_t i = BYTE; *byte & (1 << i); i--) {
         count++;
         *byte &= ~(1 << i); // trim leading 1
     }
@@ -18,20 +21,8 @@ size_t parse_code_unit(unsigned char* byte) {
     return count;
 }
 
-/* counts the number of continuous leading 0s in a byte (in binary) */
-size_t count_lead_0s(unsigned char byte) {
-    if (!byte) {return 8;}
-    size_t count = 0;
 
-    for (size_t i = 7; !(byte & (1 << i)); i--) {
-        count++;
-    }
-        
-    return count;
-}
-
-
-parse_nonitial_code_units(FILE* file, CodePoint* code_point, size_t code_units_left) {
+parse_nonitial_code_units(CodePoint* code_point, size_t code_units_left, FILE* file) {
 
     unsigned char current_code_unit;
     while (code_units_left--)
@@ -39,11 +30,10 @@ parse_nonitial_code_units(FILE* file, CodePoint* code_point, size_t code_units_l
         /* parse code unit */
         current_code_unit = fgetc(file);
         parse_code_unit(&current_code_unit);
-
-        *code_point = current_code_unit << code_units_left;   
+        printf("current_code_unit=%d\n", current_code_unit);
+        *code_point = current_code_unit << code_units_left*BYTE;   
     }
 
-    
 }
 
 
@@ -74,11 +64,15 @@ int main(void) {
         first_code_unit = (unsigned char)first_code_unit;
         code_units_left = parse_code_unit(&first_code_unit);
 
-        //if (code_units_left) {code_units_left -= 1;} /* substract the 1st code unit itself which was just parsed */
+        if (code_units_left) {code_units_left -= 1;} /* substract the 1st code unit itself which was just parsed */
         printf("code_units_left=%d\n", code_units_left);
         printf("first_code_unit=%d\n", first_code_unit);
-        current_code_point = first_code_unit << code_units_left;
+        current_code_point = first_code_unit << code_units_left*BYTE;
+        printf("current_code_point=%d\n", current_code_point);
+        parse_nonitial_code_units(&current_code_point, code_units_left, file);
+        printf("current_code_point=%d\n", current_code_point);
         printf("\n");
+
 
         
     }
