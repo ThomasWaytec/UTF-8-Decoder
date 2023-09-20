@@ -51,7 +51,7 @@ void append_to_code_point(CodeUnit* code_unit, CodePoint* code_point, size_t cod
 
 int main(void) {
     
-    const char* FILE_NAME = "samples/basic/mixed-all.txt";
+    const char* FILE_NAME = "samples/basic/alice_in_wonderland.txt";
     FILE* file = fopen(FILE_NAME, "rb");
 
 
