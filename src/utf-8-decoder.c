@@ -32,6 +32,13 @@ size_t trim_leading_1s(CodeUnit* code_unit) {
     }
 }
 
+/* 
+Appends a code unit to a code point
+*/
+void append_to_code_point(CodeUnit* code_unit, CodePoint* code_point, size_t code_units_left) {
+
+    *code_point = *code_point | (*code_unit << SHIFT*code_units_left);
+}
 
 /* extracts the code point from all the noninitial (meaning: not first) code units */
 void parse_nonitial_code_units(CodePoint* code_point, size_t code_units_left, FILE* file) {
@@ -42,7 +49,8 @@ void parse_nonitial_code_units(CodePoint* code_point, size_t code_units_left, FI
         /* parse code unit */
         current_code_unit = fgetc(file);
         trim_leading_1s(&current_code_unit);
-        *code_point = *code_point | (current_code_unit << SHIFT*code_units_left);   
+        append_to_code_point(&current_code_unit, code_point, code_units_left);
+        //*code_point = *code_point | (current_code_unit << SHIFT*code_units_left);   
 
     }
 
@@ -78,7 +86,8 @@ int main(void) {
         if (code_units_left) {code_units_left -= 1;} /* subtract the first code unit which was just parsed */
 
         /* add the parsed first code unit to the code point */
-        current_code_point = current_code_point | (first_code_unit << SHIFT*code_units_left); 
+        append_to_code_point(&first_code_unit, &current_code_point, code_units_left);
+        //current_code_point = current_code_point | (first_code_unit << SHIFT*code_units_left); 
         
         /* parse and add to the code point the remaining code units if there are any */
         if (code_units_left) {
