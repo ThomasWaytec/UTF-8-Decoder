@@ -89,8 +89,7 @@ int main(void) {
 
     
 
-        printf("current_code_point=%d\n", current_code_point);
-        printf("\n");
+        printf("%d %c\n", current_code_point, current_code_point);
 
 
         
