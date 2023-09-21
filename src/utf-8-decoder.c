@@ -51,7 +51,7 @@ void append_to_code_point(CodeUnit* code_unit, CodePoint* code_point, size_t cod
 
 int main(void) {
     
-    const char* FILE_NAME = "samples/basic/alice_in_wonderland.txt";
+    const char* FILE_NAME = "samples/basic/mixed-all.txt";
     FILE* file = fopen(FILE_NAME, "rb");
 
 
@@ -64,7 +64,7 @@ int main(void) {
     CodePoint current_code_point;
     size_t code_units_left; /* number of code units left in the code unit sequence */
     CodeUnit first_code_unit;
-    CodeUnit noninitial_code_unit;
+    CodeUnit noninitial_code_unit; /* meaning any code unit that is not the first one (in a sequence) */
     while ((first_code_unit = fgetc(file)) != EOF)
     {
         /* reset code point */
@@ -95,6 +95,8 @@ int main(void) {
 
         
     }
+
+    fclose(file);
 
     return 0;
 }
