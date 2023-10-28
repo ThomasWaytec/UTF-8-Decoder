@@ -4,13 +4,13 @@
 #define BYTE 8
 #define SHIFT (BYTE - 2) /* the base shift value for the code units. Allows to merge many code units into a single codde point */
 
-typedef unsigned int CodeUnit;  /* 
+typedef unsigned int code_unit_t;  /* 
                                 It has to be an int (even though code units are byte-sized) in order to:
                                     - check for EOF with it while reading a file
                                     - make it easily appendable to a code point
                                 */
 
-typedef unsigned int CodePoint;
+typedef unsigned int code_point_t;
 
 /* 
 Extracts the number of code units left in a sequence
@@ -19,7 +19,7 @@ by counting the number of continuous leading 1s (in binary) in the first code un
 the number of code units left is equal to
 the number of leading 1s in the code unit sequence (minus one if the number of leading 1s are larger than 0))
 */
-size_t extract_code_units_left(CodeUnit code_unit) {
+size_t extract_code_units_left(code_unit_t code_unit) {
     size_t code_units_left = 0;
 
     for (size_t i = BYTE - 1; code_unit & (1 << i); i--) {
@@ -33,7 +33,7 @@ size_t extract_code_units_left(CodeUnit code_unit) {
 /*
 Trims the number of continuous leading 1s in a code unit (in binary) 
 */
-size_t trim_leading_1s(CodeUnit* code_unit) {
+size_t trim_leading_1s(code_unit_t* code_unit) {
 
     for (size_t i = BYTE - 1; *code_unit & (1 << i); i--) {
         *code_unit &= ~(1 << i); /* trim leading 1s */
@@ -43,7 +43,7 @@ size_t trim_leading_1s(CodeUnit* code_unit) {
 /* 
 Appends a code unit to a code point
 */
-void append_to_code_point(CodeUnit* code_unit, CodePoint* code_point, size_t code_units_left) {
+void append_to_code_point(code_unit_t* code_unit, code_point_t* code_point, size_t code_units_left) {
 
     *code_point = *code_point | (*code_unit << SHIFT*code_units_left);
 }
@@ -60,11 +60,10 @@ int main(void) {
     const size_t FILE_SIZE = ftell(file); 
     fseek(file, 0, SEEK_SET);
 
-
-    CodePoint current_code_point;
+    code_point_t current_code_point;
     size_t code_units_left; /* number of code units left in the code unit sequence */
-    CodeUnit first_code_unit;
-    CodeUnit noninitial_code_unit; /* meaning any code unit that is not the first one (in a sequence) */
+    code_unit_t first_code_unit;
+    code_unit_t noninitial_code_unit; /* meaning any code unit that is not the first one (in a sequence) */
     while ((first_code_unit = fgetc(file)) != EOF)
     {
         /* reset code point */
