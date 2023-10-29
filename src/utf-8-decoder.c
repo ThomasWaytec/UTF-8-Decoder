@@ -87,8 +87,8 @@ int main(void) {
         }
 
     
-
-        printf("%d %c\n", code_point, code_point);
+        const size_t PADDING = 6;
+        printf("%0*u ", PADDING, code_point);
 
 
         
