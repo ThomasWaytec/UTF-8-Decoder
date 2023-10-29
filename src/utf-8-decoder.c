@@ -49,10 +49,17 @@ void append_to_code_point(code_unit_t* code_unit, code_point_t* code_point, size
 }
 
 
-int main(void) {
+int main(int argc, char* argv[]) {
     
-    const char* FILE_NAME = "samples/basic/mixed-all.txt";
-    FILE* file = fopen(FILE_NAME, "rb");
+    if (argc - 1 != 1) {
+        printf("Error: This program takes in exactly one argument but more or less was provided."); 
+        exit(EXIT_FAILURE);
+    }
+
+    const char* FILEPATH = argv[1];
+
+    FILE* file = fopen(FILEPATH, "rb");
+    if (file == NULL) {printf("Error: File not found or cannot be opened."); exit(EXIT_FAILURE);}
 
 
     code_point_t code_point;
@@ -84,7 +91,6 @@ int main(void) {
     
         const size_t PADDING = 6;
         printf("%0*u ", PADDING, code_point);
-
 
         
     }
