@@ -60,20 +60,20 @@ int main(void) {
     const size_t FILE_SIZE = ftell(file); 
     fseek(file, 0, SEEK_SET);
 
-    code_point_t current_code_point;
+    code_point_t code_point;
     size_t code_units_left; /* number of code units left in the code unit sequence */
     code_unit_t first_code_unit;
     code_unit_t noninitial_code_unit; /* meaning any code unit that is not the first one (in a sequence) */
     while ((first_code_unit = fgetc(file)) != EOF)
     {
         /* reset code point */
-        current_code_point = 0;
+        code_point = 0;
 
 
         /* parse first code unit */
         code_units_left = extract_code_units_left(first_code_unit);
         trim_leading_1s(&first_code_unit);
-        append_to_code_point(&first_code_unit, &current_code_point, code_units_left);
+        append_to_code_point(&first_code_unit, &code_point, code_units_left);
 
 
 
@@ -82,13 +82,13 @@ int main(void) {
         {
             noninitial_code_unit = fgetc(file);
             trim_leading_1s(&noninitial_code_unit);
-            append_to_code_point(&noninitial_code_unit, &current_code_point, code_units_left);
+            append_to_code_point(&noninitial_code_unit, &code_point, code_units_left);
     
         }
 
     
 
-        printf("%d %c\n", current_code_point, current_code_point);
+        printf("%d %c\n", code_point, code_point);
 
 
         
