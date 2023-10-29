@@ -1,7 +1,7 @@
 # UTF-8-Decoder
 
 UTF-8-Decoder is a compact and very simple C program that extracts all the code points from a UTF-8 encoded file.
-Developed primarily for my own personal research into the intricacies of UTF-8. While not designed for general usage, I am sharing this program with the hope that it may assist others in their research and exploration of UTF-8. 
+Developed primarily for my own personal research into the intricacies of UTF-8. While not designed for general usage, I am sharing this program with the hope that it may assist others in their learning and exploration of UTF-8. 
 ## Download and Compilation
 ### Prerequisites:
 - git
