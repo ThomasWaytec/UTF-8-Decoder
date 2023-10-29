@@ -55,11 +55,6 @@ int main(void) {
     FILE* file = fopen(FILE_NAME, "rb");
 
 
-    /* get file size */
-    fseek(file, 0, SEEK_END);
-    const size_t FILE_SIZE = ftell(file); 
-    fseek(file, 0, SEEK_SET);
-
     code_point_t code_point;
     size_t code_units_left; /* number of code units left in the code unit sequence */
     code_unit_t first_code_unit;
