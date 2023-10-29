@@ -52,7 +52,7 @@ void append_to_code_point(code_unit_t* code_unit, code_point_t* code_point, size
 int main(int argc, char* argv[]) {
     
     if (argc - 1 != 1) {
-        printf("Error: This program takes in exactly one argument but more or less was provided."); 
+        printf("Error: This program takes in exactly one argument but more or less were provided."); 
         exit(EXIT_FAILURE);
     }
 
