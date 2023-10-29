@@ -52,14 +52,14 @@ void append_to_code_point(code_unit_t* code_unit, code_point_t* code_point, size
 int main(int argc, char* argv[]) {
     
     if (argc - 1 != 1) {
-        printf("Error: This program takes in exactly one argument but more or less were provided."); 
+        printf("Error: This program takes in exactly one argument but more or less were provided.\n"); 
         exit(EXIT_FAILURE);
     }
 
     const char* FILEPATH = argv[1];
 
     FILE* file = fopen(FILEPATH, "rb");
-    if (file == NULL) {printf("Error: File not found or cannot be opened."); exit(EXIT_FAILURE);}
+    if (file == NULL) {printf("Error: File not found or cannot be opened.\n"); exit(EXIT_FAILURE);}
 
 
     code_point_t code_point;
