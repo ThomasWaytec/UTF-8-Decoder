@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = 
-LDFLAGS = -lm
+LDFLAGS = 
 
 SRC_DIR = src
 SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
