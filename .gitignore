@@ -1,8 +1,18 @@
-# IDE specific
-*.vscode/
-tempCodeRunnerFile.c
-
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
 
 # Executables
 *.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
 utf8
+
+# IDE
+*.vscode/
+tempCodeRunnerFile.c
