@@ -8,7 +8,7 @@ Developed primarily for my own personal research into the intricacies of UTF-8. 
 - gcc
 - make
 
-Clone the repository and run the makefile:
+Clone the repository and run the Makefile:
 ```shell
 git clone https://github.com/ThomasWaytec/UTF-8-Decoder.git
 cd ./UTF-8-Decoder
